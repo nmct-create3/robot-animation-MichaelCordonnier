@@ -15,6 +15,17 @@
   --global-html-color: var(--global-color-front);
   --global-html-backgroundColor: var(--global-color-back);
   --global-selection-backgroundColor: var(--global-color-front);
+  --c-robot-animation-duration: 3s;
+  --c-shadow-animation-duration: 3s;
+  --c-shadow-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+  --c-robot-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+  --c-robot-animation-iteration-count: infinite;
+  --c-shadow-animation-iteration-count: infinite;
+  --c-robot-animation-direction: alternate;
+  --c-shadow-animation-direction: alternate;
+  --c-robot-animation: hovering var(--c-robot-animation-duration) var(--c-robot-animation-timing-function) var(--c-robot-animation-iteration-count) var(--c-robot-animation-direction);
+  --c-shadow-animation: shadow var(--c-shadow-animation-duration) var(--c-shadow-animation-timing-function) var(--c-shadow-animation-iteration-count) var(--c-shadow-animation-direction);
+  --c-animation-play-state: running;
 }
 
 /*------------------------------------*\
@@ -34,6 +45,7 @@ html {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--global-html-backgroundColor);
 }
 
 *,
@@ -43,6 +55,12 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  
 }
 
 /*
@@ -133,11 +151,47 @@ body {
 */
 
 .c-robot {
-}
+  width: 420px;
+  max-width: 75%;
+  overflow: visible;
 
+}
+.c-robot__body{
+  fill: var(--global-color-front);
+  animation: var(--c-robot-animation);
+  animation-play-state: var(--c-animation-play-state);
+}
 .c-robot__shadow {
+  fill: #000;
+  opacity: 0.1;
+  transform-origin: 50% 100%;
+  animation: var(--c-shadow-animation);
+  animation-play-state: var(--c-animation-play-state);
 }
 
+.c-formstate{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  border: solid var(--global-html-color);
+  padding: 8px;
+  border-radius: 14px;
+ 
+}
+
+
+body:has(.c-formstate__input--pauze:checked) .c-robot__body{
+  animation-play-state: paused;
+}
+
+body:has(.c-formstate__input--pauze:checked) .c-robot__shadow{
+  animation-play-state: paused;
+}
+
+/* body:has(.c-formstate__input--playfaster:checked) .c-robot__shadow{
+  animation-duration: 1s;
+} */
 
 /*
     Component: Controls
@@ -215,5 +269,24 @@ body {
   h2,
   h3 {
     page-break-after: avoid;
+  }
+}
+
+
+@keyframes hovering{
+  0%{
+    transform: translateY(0);
+  }
+  100%{
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes shadow{
+  0%{
+    transform: scale(1.5);
+  }
+  100%{
+    transform: scale(1);
   }
 }
